@@ -30,8 +30,8 @@ class SolicitudVacacioneStore extends FormRequest
           //  'fecha_aprobacion' =>  'required',
            // 'fecha_rechazo'    =>  'required',
            // 'solicitud_id'     =>  'required',
-            'fecha_reintegro'  =>  'required',
-            'fecha_culminacion'=>  'required',
+            //'fecha_reintegro'  =>  'required',
+            //'fecha_culminacion'=>  'required',
             'cantidad_dia'     =>  'required',
             'de_acuerdo'       =>  'required'
         ];
@@ -46,8 +46,8 @@ class SolicitudVacacioneStore extends FormRequest
            // 'fecha_aprobacion.required' =>   'El campo Fecha de Aprobación es obligatorio',
            // 'fecha_rechazo.required'    =>   'El campo Fecha de Rechazo es obligatorio',
            // 'solicitud_id.required'     =>   'El campo Estado de solicitud es obligatorio',
-            'fecha_reintegro.required'  =>   'El campo Fecha de Reintegro es obligatorio',
-            'fecha_culminacion'         =>   'El campo Fecha de Culminación es obligatorio',
+           // 'fecha_reintegro.required'  =>   'El campo Fecha de Reintegro es obligatorio',
+           // 'fecha_culminacion'         =>   'El campo Fecha de Culminación es obligatorio',
             'cantidad_dia'              =>   'El campo Cantidad de Dias es obligatorio'
            
         ];

@@ -76,11 +76,12 @@ class SolicitudVacacioneController extends Controller
         
         DB::beginTransaction();
         
-        $data = $request->all();
+        $data = $request->all();        
         $data['solicitud_id'] = 3;
         $data['user_id'] = Auth::id();
         $data['de_acuerdo'] = 1;
         
+        dd($data);
         try {
 
         $solicitud_vacacion = SolicitudVacacione::create($data);

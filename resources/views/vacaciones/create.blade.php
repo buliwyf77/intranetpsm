@@ -35,8 +35,13 @@ Registro de las Vacaciones
                     @endif            
                 </div>--}}
                 <div class="mt-3">
+                    @php
+                     $habiles = [1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 7 => 7,
+                     8 => 8, 9 => 9, 10 => 10, 11 => 11, 12 => 12, 13 => 13, 14 => 14,
+                      15 => 15];  
+                    @endphp
                     {!!  Form::label('Dias Solicitados') !!}
-                    {!!  Form::number('cantidad_dia', null, ['class' => 'input w-full border mt-2', 'placeholder'=>'Dias Solicitados'])!!}
+                    {!!  Form::select('cantidad_dia', $habiles, null, ['class' => 'input w-full border mt-2', 'placeholder'=>'Dias Solicitados'])!!}
                     @if ($errors->has('cantidad_dia'))
                     <small style="color:red">
                         *{{ $errors->first('cantidad_dia') }}
@@ -53,7 +58,7 @@ Registro de las Vacaciones
                     @endif
                 </div>
 
-                <div class="mt-3">
+               {{--  <div class="mt-3">
                     {!!  Form::label('Fecha de Culminación') !!}
                     {!!  Form::date('fecha_culminacion', null, ['class' => 'input w-full border mt-2', 'placeholder'=>'Fecha de Culminación'])!!}
                     @if ($errors->has('fecha_culminacion'))
@@ -89,9 +94,9 @@ Registro de las Vacaciones
                         *{{ $errors->first('fecha_rechazo') }}
                     </small>
                     @endif
-                </div>--}}
+                </div>
              
-                {{--<div class="mt-3">
+                <div class="mt-3">
                     {!!  Form::label('Estado de la Solicitud') !!}
                     {!! Form::select('solicitud_id', $solicitudes, null, ['class' => 'input w-full border mt-2', 'placeholder'=>'Estado de la Solicitud'])!!}
                     @if ($errors->has('solicitud_id'))
