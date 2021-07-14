@@ -89,6 +89,9 @@ Route::group(['middleware' => ['auth', 'check_active']], function(){
     //->middleware('check_rol:jefe-area');
 
 
+    Route::get('diferenciaDias', 'SolicitudVacacioneController@diferenciaDias')->name('diferenciaDias');
+
+
     // Configuraciones de sistema
     Route::resource('configuraciones', 'ConfiguracioneController')->middleware('check_rol:master');
     // Infos

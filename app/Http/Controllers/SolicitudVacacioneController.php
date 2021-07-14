@@ -305,7 +305,26 @@ class SolicitudVacacioneController extends Controller
         HistoricoVacacione::actualizarHistorico($solicitud_vacacion->id, 5);
 
         return redirect()->route('vacaciones.por_aprobar_ja');
+    }
 
+    
+
+
+    public function diferenciaDias ()
+    {
+        //11
+        $date1 = Carbon::createMidnightDate(2021, 7, 15);
+        $date2 = Carbon::createMidnightDate(2021, 7, 30);
+
+        $dt = Carbon::create(2021, 7, 15);
+        
+        $dt1 = $dt->addDay(11);
+        
+        $dif = $date1->diffInWeekendDays($date2);
+
+        $dt2 = $dt1->addDay($dif);
+
+        dd($dt2);
     }
 
 
