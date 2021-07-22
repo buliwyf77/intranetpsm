@@ -37,12 +37,12 @@
              
                       <div class="ml-5">
                         <div class="flex mt-6 lg:mt-0 items-center lg:items-start flex-1 flex-col justify-center text-gray-600 px-5 border-l border-r border-gray-200 border-t lg:border-t-0 pt-5 lg:pt-0">
-                          <div class="truncate sm:whitespace-normal flex items-center mt-3"> <i data-feather="user" class="w-4 h-4 mr-2"></i> <b>Usuario:&nbsp; </b>{{$vacacione->user->name}} </div>
-                          <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Fecha:&nbsp; </b> {{$vacacione->fecha}} </div>
-                          <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Fecha de Inicio:&nbsp; </b> {{$vacacione->fecha_inicio}} </div>
-                          <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Fecha de Culminación:&nbsp; </b>{{$vacacione->fecha_culminacion}} </div>
-                          <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Fecha de Reintegro:&nbsp; </b>{{$vacacione->fecha_reintegro}} </div>
-                          <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Cantidad de Dias:&nbsp; </b>{{$vacacione->cantidad_dia}} </div>
+                          <div class="truncate sm:whitespace-normal flex items-center mt-3"> <i data-feather="user" class="w-4 h-4 mr-2"></i> <b>Usuario:&nbsp;  <a href="{{route('users.show', $vacacione->user->slug)}}"> {{$vacacione->user->name}} </a>   </b> </div>
+                          <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Fecha:&nbsp; </b> {{date('d-m-Y', strtotime($vacacione->fecha))}} </div>
+                          <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Fecha de Inicio:&nbsp; </b> {{date('d-m-Y', strtotime($vacacione->fecha_inicio))}} </div>
+                          <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Fecha de Culminación:&nbsp; </b>{{date('d-m-Y', strtotime($vacacione->fecha_culminacion))}} </div>
+                          <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Cantidad de Dias:&nbsp; </b>{{$vacacione->cantidad_dia . ' días'}}</div>
+                          <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Fecha de Reintegro:&nbsp; </b>{{date('d-m-Y', strtotime($vacacione->fecha_reintegro))}} </div>
                           @if($vacacione->solicitud_id == 1)
                           <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Fecha de Aprobación:&nbsp; </b>{{$vacacione->fecha_aprobacion}} </div>
                           @endif
@@ -103,7 +103,7 @@
                                             @endisset 
                                       </div>
                                       <div class="text-xs text-gray-500 ml-auto">
-                                        <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Fecha:&nbsp; </b>{{date('d-m.Y', strtotime($historico->created_at))}} </div>
+                                        <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Fecha:&nbsp; </b>{{date('d-m-Y', strtotime($historico->created_at))}} </div>
                                       </div>
                                   </div>
                               </div>

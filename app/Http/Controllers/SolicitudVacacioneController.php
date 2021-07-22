@@ -77,15 +77,29 @@ class SolicitudVacacioneController extends Controller
         DB::beginTransaction();
         
         $data = $request->all();        
+    
+        //Calcular la fecha de reintegro
+        $fecha_culminacion = SolicitudVacacione::calcularFechaCulminacion($data['fecha_inicio'], $data['cantidad_dia']);
+
+        $fecha_reintegro = SolicitudVacacione::calcularFechaReintegro($fecha_culminacion);
+
         $data['solicitud_id'] = 3;
         $data['user_id'] = Auth::id();
+        $data['area_id'] = Auth::user()->area_id;
         $data['de_acuerdo'] = 1;
-        
-        dd($data);
+        $data['fecha_culminacion'] = $fecha_culminacion;
+        $data['fecha_reintegro'] = $fecha_reintegro;
+
+        //dd($data);
+
         try {
 
         $solicitud_vacacion = SolicitudVacacione::create($data);
+        
+        //Actualizar status a enviado
         HistoricoVacacione::actualizarHistorico($solicitud_vacacion->id, 3);
+        
+        //enviar mails
        
         } catch (\Exception $e) {
         
@@ -306,26 +320,6 @@ class SolicitudVacacioneController extends Controller
         HistoricoVacacione::actualizarHistorico($solicitud_vacacion->id, 5);
 
         return redirect()->route('vacaciones.por_aprobar_ja');
-    }
-
-    
-
-
-    public function diferenciaDias ()
-    {
-        //11
-        $date1 = Carbon::createMidnightDate(2021, 7, 15);
-        $date2 = Carbon::createMidnightDate(2021, 7, 30);
-
-        $dt = Carbon::create(2021, 7, 15);
-        
-        $dt1 = $dt->addDay(11);
-        
-        $dif = $date1->diffInWeekendDays($date2);
-
-        $dt2 = $dt1->addDay($dif);
-
-        dd($dt2);
     }
 
 
