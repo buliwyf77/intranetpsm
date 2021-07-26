@@ -41,28 +41,25 @@ class SolicitudVacacione extends Model
 
         $fecha_inicio = date('Y-m-d H:i:s', strtotime($fecha_inicio));
 
-        $dt = Carbon::create($fecha_inicio);
-        
-        $dt->setWeekendDays([
-            Carbon::SATURDAY,
-            Carbon::SUNDAY,
-        ]);
+        $fecha1 = Carbon::createFromDate($fecha_inicio);
 
-        $dt->addDay($dias_solicitados);
+        $fecha1->setWeekendDays([Carbon::SATURDAY, Carbon::SUNDAY]);
 
-        $dif = $dt->diffInWeekendDays();
+        $fecha2 = $fecha1->addDay($dias_solicitados -1);
 
-        $dt->addDay($dif);
+        $dif = Carbon::createFromDate($fecha_inicio)->diffInWeekendDays($fecha2);
 
-        if($dt->isSaturday()){
-            $dt->addDay(2);
+        if($fecha2->isSaturday()){
+            $fecha2->addDay(2);
         }
 
-        if($dt->isSunday()){
-            $dt->addDay(1);
+        if($fecha2->isSunday()){
+            $fecha2->addDay(1);
         }
         
-        return $dt->format('Y-m-d');
+        $fecha2->addDay($dif);
+
+        return $fecha2->format('Y-m-d');
 
     }
 
