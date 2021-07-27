@@ -437,6 +437,38 @@
         <script src="{{asset('js/fullcalendar/lib/main.js')}}"></script>
         <script src="{{asset('js/fullcalendar/lib/locales/es.js')}}"></script>
         <script src="{{asset('js/ckeditor/ckeditor.js')}}"></script>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="{{asset('marquee-js/dist/js/jquery.marquee.js')}}"></script>
+
+        <script>
+            $('#demo').marquee({
+
+            // enable the plugin
+            enable : true,  //plug-in is enabled
+
+            // scroll direction
+            // 'vertical' or 'horizontal'
+            direction: 'vertical',
+
+            // children items
+            itemSelecter : 'li', 
+
+            // animation delay
+            delay: 3000,
+
+            // animation speed
+            speed: 1,
+
+            // animation timing
+            timing: 1,
+
+            // mouse hover to stop the scroller
+            mouse: true
+
+            });  
+
+        </script>
         
         <!-- END: JS Assets-->
 

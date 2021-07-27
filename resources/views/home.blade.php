@@ -30,8 +30,46 @@
     
     <div class="grid grid-cols-12 gap-6 mt-1">
         <div class="intro-y col-span-12 lg:col-span-7">
+            <div class="box p-3">
+                <h1><b>Indicadores Diarios</b></h1>
+            </div>
+            <div class="box p-5 my-1">
+                <ul id="demo">
+                    <li>
+                        <p> {{'El valor actual de la UF es $' . $dailyIndicators->uf->valor}} </p>
+                    </li>
+
+                    <li>
+                        <p> {{'El valor actual del Dólar observado es $' . $dailyIndicators->dolar->valor}} </p>
+                    </li>
+
+                    <li>
+                        <p> {{'El valor actual del Dólar acuerdo es $' . $dailyIndicators->dolar_intercambio->valor}} </p>
+                    </li>
+
+                    <li>
+                        <p> {{'El valor actual del Euro es $' . $dailyIndicators->euro->valor}} </p>
+                    </li>
+
+                    <li>
+                        <p> {{'El valor actual del IPC es ' . $dailyIndicators->ipc->valor}} </p>
+                    </li>
+
+                    <li>
+                        <p> {{'El valor actual de la UTM es $' . $dailyIndicators->utm->valor}} </p>
+                    </li>
+
+                    <li>
+                        <p> {{'El valor actual del IVP es $' . $dailyIndicators->ivp->valor}} </p>
+                    </li>
+
+                    <li>
+                        <p> {{'El valor actual del Imacec es ' . $dailyIndicators->imacec->valor}} </p>
+                    </li>
+                </ul>
+            </div>
             <div class="box p-5">
-                <h1>Noticias</h1>
+                <h1><b>Noticias</b></h1>
                 @foreach($noticias as $key => $noticia)
                     <br> 
                     <div class="intro-y blog col-span-12 md:col-span-6 box">
