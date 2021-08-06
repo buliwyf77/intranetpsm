@@ -34,39 +34,21 @@
                 <h1><b>Indicadores Diarios</b></h1>
             </div>
             <div class="box p-5 my-1">
-                <ul id="demo">
-                    <li>
-                        <p> {{'El valor actual de la UF es $' . $dailyIndicators->uf->valor}} </p>
-                    </li>
 
-                    <li>
-                        <p> {{'El valor actual del Dólar observado es $' . $dailyIndicators->dolar->valor}} </p>
-                    </li>
+                <marquee behavior="" direction="left">
+                    
+                        <p> {{'UF $' . $dailyIndicators->uf->valor . ' - '}} 
+                            {{'Dólar observado $' . $dailyIndicators->dolar->valor . ' - '}}
+                            {{'Euro $' . $dailyIndicators->euro->valor . ' - '}}
+                            {{'IPC ' . $dailyIndicators->ipc->valor . ' - '}}
+                            {{'UTM $' . $dailyIndicators->utm->valor . ' - '}} 
+                            {{'IVP $' . $dailyIndicators->ivp->valor . ' - '}} 
+                            {{'Imacec ' . $dailyIndicators->imacec->valor }}
+                        </p>
+                   
+                </marquee>
 
-                    <li>
-                        <p> {{'El valor actual del Dólar acuerdo es $' . $dailyIndicators->dolar_intercambio->valor}} </p>
-                    </li>
-
-                    <li>
-                        <p> {{'El valor actual del Euro es $' . $dailyIndicators->euro->valor}} </p>
-                    </li>
-
-                    <li>
-                        <p> {{'El valor actual del IPC es ' . $dailyIndicators->ipc->valor}} </p>
-                    </li>
-
-                    <li>
-                        <p> {{'El valor actual de la UTM es $' . $dailyIndicators->utm->valor}} </p>
-                    </li>
-
-                    <li>
-                        <p> {{'El valor actual del IVP es $' . $dailyIndicators->ivp->valor}} </p>
-                    </li>
-
-                    <li>
-                        <p> {{'El valor actual del Imacec es ' . $dailyIndicators->imacec->valor}} </p>
-                    </li>
-                </ul>
+                
             </div>
             <div class="box p-5">
                 <h1><b>Noticias</b></h1>
@@ -97,6 +79,19 @@
          </div>
 
         <div class="intro-y col-span-12 lg:col-span-5">
+            <div class="box p-3">
+                <h1><b>Clima en Santiago</b></h1>
+            </div>
+            <div class="box p-5 my-1">
+                
+                    <p>
+                        {{  $dailyClimate['symbol_description'] . ' - ' .
+                            'T° Min: ' .   $dailyClimate['tempmin']  . '°C - ' .
+                            'T° Max: ' .   $dailyClimate['tempmax']  . '°C '
+                        }}
+                    </p>
+                
+            </div>
             <div class="intro-y box p-5">
                 Calendario
                 <br>
@@ -107,36 +102,34 @@
 
             <br>
 
-            <div class="intro-y box p-5">
+            <div class="intro-y box p-5" id="getBirthdays">
+                
                 <img src="{{asset('images/cumple.png')}}" alt="">
                 <div class="intro-y box col-span-12 lg:col-span-6" style="overflow-y: scroll;height:350px;">
                     <div class="flex items-center px-5 py-5 sm:py-3 border-b border-gray-200">
                         <h2 class="font-medium text-base mr-auto">
-                          <b>Cumpleañeros del Mes</b>  
+                            <b>Cumpleañeros del Mes</b>
+                            <select v-model="month" class='input w-full border mt-2' v-on:change="cumpleMes">
+                                <option v-for="option in options" v-bind:value="option.value" >
+                                @{{ option.text }}
+                                </option>
+                            </select>
                         </h2>
                     </div>
-                    @if(count($users) > 0)
-                        @foreach($users as $key => $user)
-                            <div class="p-5">
-                                <div class="relative flex items-center">
-                                    <div class="w-12 h-12 flex-none image-fit">
-                                        <img alt="{{$user->name}}" class="rounded-full" src="{{$user->info->imagen}}">
-                                    </div>
-                                    <div class="ml-4 mr-auto">
-                                        <a href="" class="font-medium">{{$user->name}}</a> 
-                                        <div class="text-gray-600 mr-5 sm:mr-5">{{date('d-m', strtotime($user->info->fecha_nacimiento))}}</div>
-                                        <div class="text-gray-600 mr-5 sm:mr-5">{{$user->info->area->nombre}}</div>
-                                    </div>
-                                </div>
+                
+                    <div class="p-1" v-for="(user, index) in birthdays" :key="user.id" >
+                        <div class="relative flex items-center">
+                            <div class="w-12 h-12 flex-none image-fit m-1">
+                                <img :alt="user.name" class="rounded-full" :src="user.image">
                             </div>
-                            <hr>
-                        @endforeach
-                    @else
-                            <p>No hay cumpleañeros este mes!</p>
-                    @endif
-
-                    
+                            <div class="ml-4 mr-auto">
+                                <p class="font-medium"> @{{ user.birthday }} : @{{ user.name }}</p>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
                 </div>
+                
             </div>
         </div>
         
@@ -149,6 +142,7 @@
 <script>
 
     document.addEventListener('DOMContentLoaded', function() {
+
       var calendarEl = document.getElementById('calendar');
         
       var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -169,25 +163,23 @@
   
         displayEventTime: false, // don't show the time column in list view
   
-        // THIS KEY WON'T WORK IN PRODUCTION!!!
-        // To make your own Google API key, follow the directions here:
-        // http://fullcalendar.io/docs/google_calendar/
         googleCalendarApiKey: 'AIzaSyDcnW6WejpTOCffshGDDb4neIrXVUA1EAE',
   
         // US Holidays
         //events: 'en.usa#holiday@group.v.calendar.google.com',
-        /*events : 
+        events : 
         [
             {
                 title : 'Carlos Covis',
-                start : '2020-11-09',
+                start : '2021-07-27',
             },
             {
                 title : 'Dayana Semprun',
-                start : '2020-11-10',
+                start : '2021-07-28',
             }
-        ],*/
-        eventBackgroundColor : 'red',
+        ],
+        
+        //eventBackgroundColor : 'red',
         /*eventClick: function(arg) {
           // opens events in a popup window
           window.open(arg.event.url, 'google-calendar-event', 'width=700,height=600');
@@ -196,14 +188,61 @@
         },*/
   
         loading: function(bool) {
-          document.getElementById('loading').style.display =
-            bool ? 'block' : 'none';
+          document.getElementById('loading').style.display = bool ? 'block' : 'none';
         }
   
-      });
+        });
   
-      calendar.render();
+        calendar.render();
+
+        /*var cdate = calendar.getDate();
+        var month_int = cdate.getMonth();
+        var month = ((month_int+1)); 
+        console.log(month)*/
     });
+
+
+    var app = new Vue({
+        el: '#getBirthdays',
+        data: {
+            month: 0,
+            options: [
+                { text: 'Enero', value: 1 },
+                { text: 'Febrero', value: 2 },
+                { text: 'Marzo', value: 3 },
+                { text: 'Abril', value: 4 },
+                { text: 'Mayo', value: 5 },
+                { text: 'Junio', value: 6 },
+                { text: 'Julio', value: 7 },
+                { text: 'Agosto', value: 8 },
+                { text: 'Septiembre', value: 9 },
+                { text: 'Octubre', value: 10 },
+                { text: 'Noviembre', value: 11 },
+                { text: 'Diciembre', value: 12 }
+            ],
+            birthdays: [],
+        },
+        created : function () {
+            let vm = this;
+            vm.cumpleMes();
+            vm.getMonth();
+        },
+        methods: {
+            getMonth: function ()
+            {
+                let vm = this;
+                const current = new Date();
+                return vm.month = (current.getMonth() + 1);
+            },
+            cumpleMes: function () {
+                let vm = this;
+                axios.get('/api/getCumpleMes/' + this.month)
+                .then(function (response) {
+                    vm.birthdays = response.data;
+                })
+            }
+        }
+    })
   
   </script>
 @endpush

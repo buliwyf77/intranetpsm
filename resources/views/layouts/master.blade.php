@@ -412,8 +412,6 @@
             <!-- END: Content -->
         </div>
 
-
-
         <!-- Modal de Soporte -->
         <div class="modal" id="modal-soporte">
             <div class="modal__content relative"> <a data-dismiss="modal" href="javascript:;" class="absolute right-0 top-0 mt-3 mr-3"> <i data-feather="x" class="w-8 h-8 text-gray-500"></i> </a>
@@ -427,19 +425,17 @@
             </div>
         </div>
 
-
-
-
         <!-- BEGIN: JS Assets-->
         <!--<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>-->
         <!--<script src="https://maps.googleapis.com/maps/api/js?key=["your-google-map-api"]&libraries=places"></script>-->
         <script src="{{asset('template/dist/js/app.js')}}"></script>
         <script src="{{asset('js/fullcalendar/lib/main.js')}}"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script src="{{asset('js/fullcalendar/lib/locales/es.js')}}"></script>
         <script src="{{asset('js/ckeditor/ckeditor.js')}}"></script>
-
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script src="{{asset('marquee-js/dist/js/jquery.marquee.js')}}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 
         <script>
             $('#demo').marquee({
@@ -449,7 +445,7 @@
 
             // scroll direction
             // 'vertical' or 'horizontal'
-            direction: 'vertical',
+            direction: 'horizontal',
 
             // children items
             itemSelecter : 'li', 

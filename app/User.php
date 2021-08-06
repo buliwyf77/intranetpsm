@@ -117,26 +117,31 @@ class User extends Authenticatable
         return $contrato->cargo->nombre;
     }
 
-    static function cumpleMes ()
+    static function cumpleMes ($month)
     {
-        $users = User::with('info')->get();
-        $cumples = [];
-        foreach ($users as $key => $user) {
-            if(date('m') ==  (date('m', strtotime($user->info->fecha_nacimiento))))
-            {
-                $cumples[$key] = $user;
-                $cumples[$key]['fecha_nacimiento'] = $user->info->fecha_nacimiento;
-                $cumples[$key]['dia_nacimiento'] = date('d', strtotime($user->info->fecha_nacimiento));
-                $cumples[$key]['dia_cumple'] = date('Y-m-') . $cumples[$key]['dia_nacimiento'];
-            }
-            
-        }
-        $cumples = collect($cumples);
+        $users = User::with('info')->where('activo', 1)->get();
 
-        $cumples->all();
+        $birthdays = [];
+
+        foreach ($users as $key => $user) {
+
+            if($month ==  (date('m', strtotime($user->info->fecha_nacimiento))))
+            {
+                $birthdays[$key]['id'] = $user->id;
+                $birthdays[$key]['name'] = $user->name;
+                $birthdays[$key]['image'] = $user->info->imagen;
+                $birthdays[$key]['birthday'] = date('d-m', strtotime($user->info->fecha_nacimiento));
+            }
+        }
+
+        //dd($birthdays);
         
-        return $cumples->sortBy('dia_nacimiento');
-       
+        $birthdays = collect($birthdays);
+
+        $birthdays->all();
+
+        return $birthdays->sortBy('birthday');
+
     }
 
     // Metodo para verificar que el usuario tiene firma registrada antes de descargar documentos
