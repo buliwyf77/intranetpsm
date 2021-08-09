@@ -167,7 +167,7 @@
   
         // US Holidays
         //events: 'en.usa#holiday@group.v.calendar.google.com',
-        events : 
+        /*events : 
         [
             {
                 title : 'Carlos Covis',
@@ -177,7 +177,7 @@
                 title : 'Dayana Semprun',
                 start : '2021-07-28',
             }
-        ],
+        ],*/
         
         //eventBackgroundColor : 'red',
         /*eventClick: function(arg) {
