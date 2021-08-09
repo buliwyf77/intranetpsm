@@ -2,23 +2,31 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use App\User;
 use App\Info;
+
+
+
 use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use SoftDeletes;
+ 
+   
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
+    protected $dates = ['deleted_at'];
     protected $fillable = [
         'name', 'email', 'password', 'role_id', 'slug', 'area_id', 'activo', 'jefe_area'
     ];

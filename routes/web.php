@@ -147,6 +147,8 @@ Route::group(['middleware' => ['auth', 'check_active']], function(){
 
     Route::get('user/edit/{slug}', 'UserController@edit')->name('users.edit');
 
+    Route::get('user/{id}/eliminar', 'UserController@delete');
+
     Route::patch('user/update/{id}', 'UserController@update')->name('users.update');
 
 

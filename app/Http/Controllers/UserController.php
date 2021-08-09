@@ -260,6 +260,14 @@ class UserController extends Controller
      * @param  \App\user  $user
      * @return \Illuminate\Http\Response
      */
+
+    public function delete($id)
+    {
+       $user = User::find($id);
+       $user->delete();
+        return back()->with('notification', 'El usuario se ha dado de baja correctamente');
+    }
+
     public function destroy(User $user)
     {
         try {

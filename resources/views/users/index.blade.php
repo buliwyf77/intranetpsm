@@ -35,10 +35,12 @@
                         <a href="{{route('users.show', $user->slug)}}" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ver user"> <i data-feather="eye"></i> </a>
                         @if(Auth::user()->role_id == 1)
                         <a href="{{route('users.edit', $user->slug)}}" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Editar user"> <i data-feather="edit"></i> </a>
-                        {!! Form::model($user, ['method' => 'delete', 'route' => ['users.destroy', $user->id], 'class' =>'form-inline form-delete']) !!}
-                        {!! Form::hidden('id', $user->id) !!}
+                        <a href="/user/{{$user->id}}/eliminar" class="btn btn-danger btn-sm delete" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Eliminar"><i data-feather="trash-2"></i> </a>
+
+                        <!-- {! Form::model($user, ['method' => 'delete', 'route' => ['users.destroy', $user->id], 'class' =>'form-inline form-delete']) !!}
+                        {! Form::hidden('id', $user->id) !!}
                         <button type="submit" name="delete_modal" class="btn btn-danger btn-sm delete" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Eliminar"><i data-feather="trash-2"></i></button>
-                        {!! Form::close() !!}
+                        {! Form::close() !!} -->
                         @endif
                     </div>
                 </td>
