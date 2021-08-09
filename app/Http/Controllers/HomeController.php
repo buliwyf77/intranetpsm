@@ -26,20 +26,22 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $users = User::cumpleMes();
+        //$users = User::cumpleMes(2);
         
-        $cumples = [];
+        /*$cumples = [];
 
         foreach ($users as $key => $user) {
             $cumples[$key]['title'] = $user->name;
             $cumples[$key]['start'] = $user->dia_cumple;
-        }
+        }*/
 
         $noticias = Noticia::orderBy('id', 'DESC')->paginate(3);
 
         $dailyIndicators  = $this->dailyIndicators();
 
-        return view('home', compact('users', 'noticias', 'dailyIndicators'));
+        $dailyClimate = $this->dailyClimate();
+
+        return view('home', compact('noticias', 'dailyIndicators', 'dailyClimate'));
 
         //return redirect()->route('users.show', Auth::id());
     }
@@ -70,5 +72,29 @@ class HomeController extends Controller
         $dailyIndicators = json_decode($json);
 
         return $dailyIndicators;
+    }
+
+    public function dailyClimate ()
+    {
+        $apiUrl = 'http://api.meteored.cl/index.php?api_lang=cl&localidad=18578&affiliate_id=ny7bcfb623tj&v=3.0';
+
+        if ( ini_get('allow_url_fopen') ) {
+            $json = file_get_contents($apiUrl);
+        } else {
+            //De otra forma utilizamos cURL
+            $curl = curl_init($apiUrl);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            $json = curl_exec($curl);
+            curl_close($curl);
+        }
+        
+        $climate = json_decode($json, true);
+
+        $dailyClimate['symbol_description']   =   $climate['day'][1]['symbol_description'];
+        $dailyClimate['tempmin']   =   $climate['day'][1]['tempmin'];
+        $dailyClimate['tempmax']   =   $climate['day'][1]['tempmax'];
+
+        return $dailyClimate;
+
     }
 }

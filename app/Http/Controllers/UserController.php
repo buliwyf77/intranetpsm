@@ -404,4 +404,11 @@ class UserController extends Controller
     }
 
 
+    //Api para recibir las fechas de los cumpleañeros del mes
+    public function getCumpleMes($mes)
+    {
+        return json_encode(User::cumpleMes($mes), true);
+    }
+
+
 }
