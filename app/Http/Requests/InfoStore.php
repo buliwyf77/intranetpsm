@@ -32,7 +32,11 @@ class InfoStore extends FormRequest
             'pasaporte'            =>  'required',
             'direccion'            =>  'required',
             'telefono'             =>  'required',
-            'imagen'               =>  'required'
+            'imagen'               =>  'required',
+            'emergencia_nombre'    =>  'required',
+            'emergencia_telefono'    =>  'required',
+
+            
         ];
     }
 
@@ -47,8 +51,9 @@ class InfoStore extends FormRequest
             'pasaporte.required'        =>   'El campo Pasaporte es obligatorio',
             'direccion.required'        =>   'El campo Dirección es obligatorio',
             'telefono'                  =>   'El campo Telefono es obligatorio',
-            'imagen'                    =>   'El campo Imagen es obligatorio'
-           
+            'imagen'                    =>   'El campo Imagen es obligatorio',
+            'emergencia_nombre'         =>   'El nombre del contacto de emergencia es requerido',
+            'emergencia_telefono'       =>   'El teléfono del contacto de emergencia es requerido',
         ];
     }
 }

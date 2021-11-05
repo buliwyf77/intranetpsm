@@ -19,7 +19,9 @@ class Info extends Model
         'telefono',
         'imagen',
         'firma',
-        'area_id'
+        'area_id',
+        'emergencia_nombre',
+        'emergencia_telefono'
     ];
     
     public function user ()

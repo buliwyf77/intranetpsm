@@ -69,12 +69,25 @@ Registro de Usuarios
                 </small>
                 @endif
             </div>
+
+            
             <div class="mt-3">
-                {!! Form::label('Área a la que pertenece') !!}
-                {!! Form::select('area_id', $area, null, ['class' => 'input w-full border mt-2', 'placeholder'=>'Selecciona'])!!}
-                @if ($errors->has('area_id'))
+                {!!  Form::label('Contacto de Emergencia') !!}
+                {!!  Form::text('emergencia_nombre', null, ['class' => 'input w-full border mt-2', 'placeholder'=>'Nombre'])!!}
+                @if ($errors->has('emergencia_nombre'))
                 <small style="color:red">
-                    *{{ $errors->first('area_id') }}
+                    *{{ $errors->first('emergencia_nombre') }}
+                </small>
+                @endif
+            </div>
+           
+            <div class="mt-3">
+                {!!  Form::label('Foto') !!} <br>
+                {!!  Form::file('imagen', null, ['class' => 'input w-full border mt-2 '])!!}
+                <br>
+                @if ($errors->has('imagen'))
+                <small style="color:red">
+                    *{{ $errors->first('imagen') }}
                 </small>
                 @endif
             </div>
@@ -140,13 +153,23 @@ Registro de Usuarios
                 </small>
                 @endif
             </div>
+
             <div class="mt-3">
-                {!!  Form::label('Foto') !!} <br>
-                {!!  Form::file('imagen', null, ['class' => 'input w-full border mt-2 '])!!}
-                <br>
-                @if ($errors->has('imagen'))
+                {!! Form::label('Área a la que pertenece') !!}
+                {!! Form::select('area_id', $area, null, ['class' => 'input w-full border mt-2', 'placeholder'=>'Selecciona'])!!}
+                @if ($errors->has('area_id'))
                 <small style="color:red">
-                    *{{ $errors->first('imagen') }}
+                    *{{ $errors->first('area_id') }}
+                </small>
+                @endif
+            </div>
+
+            <div class="mt-3">
+                {!!  Form::label('Teléfono del Contacto') !!}
+                {!!  Form::text('emergencia_telefono', null, ['class' => 'input w-full border mt-2', 'placeholder'=>'Teléfono del Contacto'])!!}
+                @if ($errors->has('emergencia_telefono'))
+                <small style="color:red">
+                    *{{ $errors->first('emergencia_telefono') }}
                 </small>
                 @endif
             </div>

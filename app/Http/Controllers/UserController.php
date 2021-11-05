@@ -66,6 +66,8 @@ class UserController extends Controller
         
         $data = $request->all();
 
+        dd($data);
+
         $user = [
             'name'  => $data['name'],
             'email' => $data['email'],
@@ -98,6 +100,8 @@ class UserController extends Controller
             'telefono'          => $data['telefono'],
             'imagen'            => $imagen,
             'area_id'           => $data['area_id'],
+            'emergencia_nombre' => $data['emergencia_nombre'],
+            'emergencia_telefono' => $data['emergencia_telefono'],
             'user_id'           => $new_user->id
         ];
 
@@ -201,7 +205,13 @@ class UserController extends Controller
             DB::beginTransaction();
             
             try {
-                $data['password'] = bcrypt($data['password']);
+
+                if (isset($data['password'])) {
+                    $data['password'] = bcrypt($data['password']);
+                }else{
+                    $data['password'] = $user->password;
+                }
+                
                 $user->fill($data);
                 $user->save();
 
@@ -222,7 +232,9 @@ class UserController extends Controller
                     'direccion'         => $data['direccion'],
                     'telefono'          => $data['telefono'],
                     'imagen'            => $imagen,
-                    'area_id'           => $data['area_id']
+                    'area_id'           => $data['area_id'],
+                    'emergencia_nombre' => $data['emergencia_nombre'],
+                    'emergencia_telefono' => $data['emergencia_telefono'],
                 ]; 
 
                 $info = Info::where('user_id', $user->id)->first();
@@ -357,14 +369,25 @@ class UserController extends Controller
     }
 
     //Formulario para Crear Firma de Usuario
-    public function crearFirma () 
+    public function crearFirma ($slug) 
     {
-        return view('users.crear_firma');
+        $user = User::where('slug', $slug)->first();
+        $user_id = $user->id;
+        
+        $verifyAccess = User::getUserAuthorized($user->id);
+
+        if ($verifyAccess) {
+            return view('users.crear_firma', compact('user_id'));
+        }else{
+            abort(403);
+        }
+
     }
 
     //Metodo para Guardar la Firma del USuario
     public function guardarFirma (Request $request)
     {
+
         $img = $request->get('firma');
         $img = str_replace('data:image/png;base64,', '', $img);
         $img = str_replace(' ', '+', $img);
@@ -374,8 +397,8 @@ class UserController extends Controller
         $imagen = Storage::disk('s3')->put('users-firmas/'.$imageName, $data);
         $firma = 'https://intranet1.s3-sa-east-1.amazonaws.com/users-firmas/'.$imageName;
 
-        $user_id = Auth::id();
-        $user = Auth::user();
+        $user_id = $request->get('user_id');
+        $user = User::find($user_id);
         $info = Info::where('user_id', $user_id)->first();
         $info->update(['firma' => $firma]);
         

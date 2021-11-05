@@ -26,8 +26,8 @@ class UserUpdate extends FormRequest
         return [
             'name'                 =>  'required',
             'email'                =>  'required|email:rfc,dns',
-            'password'             =>  'required|min:8|confirmed',
-            'password_confirmation' => 'required|min:8',
+            //'password'             =>  'required|min:8|confirmed',
+            //'password_confirmation' => 'required|min:8',
             'doc_identidad'        =>  'required',
             'num_doc'              =>  'required|max:12',
             'nacionalidad'         =>  'required',

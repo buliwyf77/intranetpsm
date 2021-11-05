@@ -165,7 +165,7 @@ Route::group(['middleware' => ['auth', 'check_active']], function(){
 
     Route::get('noticias/{slug}', 'NoticiaController@show')->name('noticias.show');
 
-    Route::get('user/crear_firma', 'UserController@crearFirma')->name('user.crearFirma');
+    Route::get('user/crear_firma/{slug}', 'UserController@crearFirma')->name('user.crearFirma');
 
     Route::post('user/guardar_firma', 'UserController@guardarFirma')->name('user.guardarFirma');
 

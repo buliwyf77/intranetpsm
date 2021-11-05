@@ -198,7 +198,6 @@ Registro de Firma
         <div class="p-5 lg:col-span-6">    
             <div class="mt-3">
                 <div class="">
-                  
                     <div class="row">
                         <div class="col-md-12">
                              <canvas id="draw-canvas">
@@ -225,6 +224,7 @@ Registro de Firma
 
                     {{ Form::open(array('route' => 'user.guardarFirma')) }}
                     <textarea id="draw-dataUrl" style="display:none;" name="firma"></textarea>
+                    {{Form::hidden('user_id', $user_id)}}
                     {{ Form::submit('Guardar', array('class' => "button w-24 bg-theme-1 text-white")) }}
                     {{ Form::close() }}
                 </div>

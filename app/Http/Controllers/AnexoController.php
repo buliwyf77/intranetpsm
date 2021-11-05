@@ -49,9 +49,13 @@ class AnexoController extends Controller
     {
         DB::beginTransaction();
 
+        
+
         try {
             $data = $request->all();
             $contrato = Contrato::find($data['contrato_id']);
+
+            $user = User::find($contrato->user_id);
 
             if ($request->hasFile('archivo')) {
                 $archivo = Storage::disk('s3')->put('anexos/'.$data['fecha'], $data['archivo']);
@@ -70,7 +74,9 @@ class AnexoController extends Controller
             
             alert()->success('Registro Exitoso','El registro se ha procesado de manera exitosa')->showConfirmButton();
     
-            return redirect()->route('contratos.usuario', $contrato->user_id);
+            //return redirect()->route('contratos.usuario', $contrato->user_id);
+
+            return redirect()->route('users.show', $user->slug);
 
     }
 

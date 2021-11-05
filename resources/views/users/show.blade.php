@@ -12,7 +12,7 @@
 
 <div align="right">
   <a class="button w-24 mr-1 mb-2 bg-theme-1 text-white" href="{{route('users.edit', $user->slug)}}">  Editar </a>
-  <a class="button w-24 mr-1 mb-2 bg-theme-1 text-white" href="{{route('user.crearFirma')}}">  Crear Firma </a>
+  <a class="button w-24 mr-1 mb-2 bg-theme-1 text-white" href="{{route('user.crearFirma', $user->slug)}}">  Crear Firma </a>
   <a class="button w-24 mr-1 mb-2 bg-theme-1 text-white" href="{{route('users.pdfCertificadoAntiguedad', $user->id)}}"> Certificado de Antiguedad </a>
  
 </div>
@@ -44,8 +44,10 @@
       <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Teléfono:&nbsp; </b>{{$user->info->telefono}} </div>
       <div class="truncate sm:whitespace-normal flex items-center mt-3"> <b>Dirección:&nbsp; </b> </div>
       <div class="truncate sm:whitespace-normal flex items-center mt-1">  {{$user->info->direccion}} </div>                                                                          
+      <div class="truncate sm:whitespace-normal flex items-center mt-1"> <b>Contacto de Emergencia:&nbsp; </b> {{$user->info->emergencia_nombre}} </div>                                                                          
+      <div class="truncate sm:whitespace-normal flex items-center mt-1"> <b>Teléfono de Emergencia:&nbsp; </b> {{$user->info->emergencia_telefono}} </div>                                                                          
+      
     </div>
-    
   </div>
 </div>
 <!-- END: Perfil -->

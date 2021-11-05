@@ -68,12 +68,28 @@
                     </small>
                     @endif
                 </div>
+
                 <div class="mt-3">
-                    {!! Form::label('Área a la que pertenece') !!}
-                    {!! Form::select('area_id', $area, null, ['class' => 'input w-full border mt-2', 'placeholder'=>'Selecciona'])!!}
-                    @if ($errors->has('area_id'))
+                    {!!  Form::label('Contacto de Emergencia') !!}
+                    {!!  Form::text('emergencia_nombre', $user->info->emergencia_nombre, ['class' => 'input w-full border mt-2', 'placeholder'=>'Nombre'])!!}
+                    @if ($errors->has('emergencia_nombre'))
                     <small style="color:red">
-                        *{{ $errors->first('area_id') }}
+                        *{{ $errors->first('emergencia_nombre') }}
+                    </small>
+                    @endif
+                </div>
+
+                <div class="mt-3">
+                    {!!  Form::label('Foto') !!}
+                    <div class="w-20 h-20 sm:w-24 sm:h-24 flex-none lg:w-32 lg:h-32 image-fit relative">
+                        <img alt="{{$user->name}}" class="rounded-full" src="{{$user->info->imagen}}">
+                        <div class="absolute mb-1 mr-1 flex items-center justify-center bottom-0 right-0 bg-theme-1 rounded-full p-2"></div>
+                    </div>
+              
+                    {!!  Form::file('imagen', null, ['class' => 'input w-full border mt-2', 'placeholder'=>'Foto'])!!}
+                    @if ($errors->has('imagen'))
+                    <small style="color:red">
+                        *{{ $errors->first('imagen') }}
                     </small>
                     @endif
                 </div>
@@ -139,21 +155,26 @@
                     </small>
                     @endif
                 </div>
+                
                 <div class="mt-3">
-                    {!!  Form::label('Foto') !!}
-                    <div class="w-20 h-20 sm:w-24 sm:h-24 flex-none lg:w-32 lg:h-32 image-fit relative">
-                        <img alt="{{$user->name}}" class="rounded-full" src="{{$user->info->imagen}}">
-                        <div class="absolute mb-1 mr-1 flex items-center justify-center bottom-0 right-0 bg-theme-1 rounded-full p-2"></div>
-                    </div>
-              
-                    {!!  Form::file('imagen', null, ['class' => 'input w-full border mt-2', 'placeholder'=>'Foto'])!!}
-                    @if ($errors->has('imagen'))
+                    {!! Form::label('Área a la que pertenece') !!}
+                    {!! Form::select('area_id', $area, $user->info->area_id, ['class' => 'input w-full border mt-2', 'placeholder'=>'Selecciona'])!!}
+                    @if ($errors->has('area_id'))
                     <small style="color:red">
-                        *{{ $errors->first('imagen') }}
+                        *{{ $errors->first('area_id') }}
                     </small>
                     @endif
                 </div>
-                
+
+                <div class="mt-3">
+                    {!!  Form::label('Teléfono del Contacto') !!}
+                    {!!  Form::text('emergencia_telefono', $user->info->emergencia_telefono, ['class' => 'input w-full border mt-2', 'placeholder'=>'Teléfono del Contacto'])!!}
+                    @if ($errors->has('emergencia_telefono'))
+                    <small style="color:red">
+                        *{{ $errors->first('emergencia_telefono') }}
+                    </small>
+                    @endif
+                </div>
             </div>
             
         </div>
