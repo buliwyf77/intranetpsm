@@ -156,6 +156,8 @@ Route::group(['middleware' => ['auth', 'check_active']], function(){
 
     Route::resource('anexos', 'AnexoController')->except(['create'])->middleware('check_rol:master|administracion');
 
+    Route::resource('liquidaciones', 'LiquidacioneController')->middleware('check_rol:master|administracion');
+
     Route::get('anexos/add/{contrato_id}', 'AnexoController@create')->name('anexos.add')->middleware('check_rol:master|administracion');
 
     Route::get('noticias/show', 'HomeController@showNoticias')->name('noticias.show');

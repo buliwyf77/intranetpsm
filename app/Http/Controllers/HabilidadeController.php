@@ -135,13 +135,12 @@ class HabilidadeController extends Controller
     public function destroy(habilidade $habilidade)
     {        
         try {
-       
             $habilidade->delete();
         } catch (Exception $habilidade) {
             alert()->error('Error', $habilidade->getMessage())->showCloseButton()->showConfirmButton();
             return redirect()->back();
-    }
-    return redirect()->route('habilidades.index');
+        }
+        return redirect()->route('habilidades.index');
 
     }
 }

@@ -49,8 +49,6 @@ class AnexoController extends Controller
     {
         DB::beginTransaction();
 
-        
-
         try {
             $data = $request->all();
             $contrato = Contrato::find($data['contrato_id']);
@@ -99,7 +97,8 @@ class AnexoController extends Controller
      */
     public function edit(Anexo $anexo)
     {
-        //
+        $tipo_contrato = TipoContrato::pluck('nombre', 'id');
+        return view('anexos.edit', compact('tipo_contrato', 'anexo'));
     }
 
     /**
@@ -111,7 +110,31 @@ class AnexoController extends Controller
      */
     public function update(Request $request, Anexo $anexo)
     {
-        //
+        $data = $request->all();
+    
+        DB::beginTransaction();
+        
+        try {
+            
+            if ($request->hasFile('archivo')) {
+                $archivo = Storage::disk('s3')->put('anexos/'.$data['fecha'], $data['archivo']);
+                $data['archivo'] = 'https://intranet1.s3-sa-east-1.amazonaws.com/' . $archivo;
+            }
+
+            $anexo->fill($data);
+            $anexo->save();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            alert()->error('Error', $e->getMessage());
+            return redirect()->back()->withInput();
+        }
+
+        DB::commit();
+
+        alert()->success('Registro Exitoso','El registro se ha procesado de manera exitosa')->showConfirmButton();
+
+        return redirect()->route('users.show', $anexo->contrato->user->slug);
     }
 
     /**
@@ -122,6 +145,15 @@ class AnexoController extends Controller
      */
     public function destroy(Anexo $anexo)
     {
-        //
+        $user = User::find($anexo->contrato->user_id);
+        
+        try {
+            $anexo->delete();
+        } catch (Exception $anexo) {
+            alert()->error('Error', $anexo->getMessage())->showCloseButton()->showConfirmButton();
+            return redirect()->back();
+        }
+        //return redirect()->route('anexos.index');
+        return redirect()->route('users.show', $user->slug);
     }
 }

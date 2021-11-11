@@ -49,8 +49,11 @@
                                     <div class="intro-y col-span-12 lg:col-span-12">
                                         <h3 class="text-2xl text-theme-1 font-medium leading-none mt-5">Anexo de Contrato</h3>
                                         <div align="right">
-                                            <a href="{{route('anexos.add', $anexo->id)}}" target="_blank" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Editar Anexo de Contrato"> <i data-feather="edit"></i> </a>
-                                            <a href="{{route('anexos.add', $anexo->id)}}" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Eliminar Anexo de Contrato"> <i data-feather="trash-2"></i> </a>
+                                            <a href="{{route('anexos.edit', $anexo->id)}}" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Editar Anexo de Contrato"> <i data-feather="edit"></i> </a>
+                                            {!! Form::model($anexo, ['method' => 'delete', 'route' => ['anexos.destroy', $anexo->id], 'class' =>'form-inline form-delete']) !!}
+                                            {!! Form::hidden('id', $anexo->id) !!}
+                                            <button type="submit" name="delete_modal" class="btn btn-danger btn-sm delete" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Eliminar"><i data-feather="trash-2"></i></button>
+                                            {!! Form::close() !!}
                                         </div>
                                         
                                         <div class="intro-y box p-5">

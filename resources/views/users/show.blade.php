@@ -53,7 +53,15 @@
 <!-- END: Perfil -->
 
   <div class="accordion">
-      <div class="accordion__pane active border-b border-gray-200 pb-4"> <a href="javascript:;" class="accordion__pane__toggle font-medium block">
+    <div class="accordion__pane active border-b border-gray-200 pb-4"> <a href="javascript:;" class="accordion__pane__toggle font-medium block">
+      <h3 class="text-4xl text-theme-1 font-medium leading-none mt-5"> 
+        <i data-feather="plus-circle" style="display: inline-block"></i> Liquidaciones 
+      </h3>
+      <div class="accordion__pane__content mt-3 text-gray-700 leading-relaxed">
+          @include('users.user-liquidaciones')
+       </div>
+    </div>
+    <div class="accordion__pane active border-b border-gray-200 pb-4"> <a href="javascript:;" class="accordion__pane__toggle font-medium block">
       <h3 class="text-4xl text-theme-1 font-medium leading-none mt-5"> 
         <i data-feather="plus-circle" style="display: inline-block"></i> Contratos 
       </h3>

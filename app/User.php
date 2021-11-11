@@ -118,6 +118,10 @@ class User extends Authenticatable
         return $this->hasMany('App\JefeArea');
     }
     
+    public function liquidaciones ()
+    {
+        return $this->hasMany('App\Liquidacione');
+    }
 
     static function getUserCargo($user_id)
     {

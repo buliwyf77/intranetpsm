@@ -92,7 +92,7 @@
 
 <table>
     <tr>
-        <td align="left"><img src="C:/xampp/htdocs/intranet/public/images/psm-small.png" alt="logo-psm" ></td>
+        <td align="left"><img src="C:/xampp/htdocs/intranet-v-2/public/images/psm-small.png" alt="logo-psm" ></td>
         <td align="right">
             <p class="p2 caja1">
                 <b> {{$empresa->nombre_empresa}} </b> <br>

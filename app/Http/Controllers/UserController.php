@@ -66,7 +66,7 @@ class UserController extends Controller
         
         $data = $request->all();
 
-        dd($data);
+        //dd($data);
 
         $user = [
             'name'  => $data['name'],
