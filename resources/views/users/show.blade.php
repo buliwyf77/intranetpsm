@@ -13,8 +13,9 @@
 <div align="right">
   <a class="button w-24 mr-1 mb-2 bg-theme-1 text-white" href="{{route('users.edit', $user->slug)}}">  Editar </a>
   <a class="button w-24 mr-1 mb-2 bg-theme-1 text-white" href="{{route('user.crearFirma', $user->slug)}}">  Crear Firma </a>
+  @if(count($user->contratos) > 0)
   <a class="button w-24 mr-1 mb-2 bg-theme-1 text-white" href="{{route('users.pdfCertificadoAntiguedad', $user->id)}}"> Certificado de Antiguedad </a>
- 
+  @endif
 </div>
 
 <div class="intro-y box px-5 pt-5 mt-5">
