@@ -17,6 +17,7 @@ use App\Certificacione;
 use App\Configuracione;
 use App\Habilidade;
 use App\JefeArea;
+use App\Liquidacione;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -145,15 +146,17 @@ class UserController extends Controller
             $verifyAccess = User::getUserAuthorized($user->id);
 
             if ($verifyAccess) {
+
                 $habilidades = Habilidade::orderBy('nombre', 'DESC')->pluck('nombre', 'id');
                 $titulos = Titulo::orderBy('nombre', 'DESC')->pluck('nombre', 'id');
                 $certificaciones = Certificacione::orderBy('nombre', 'DESC')->pluck('nombre', 'id');
                 $proyectos = Proyecto::orderBy('nombre', 'DESC')->pluck('nombre', 'id');
                 $vacaciones = SolicitudVacacione::where('user_id', $user->id)->orderBy('id', 'DESC')->get();
                 $aumentos = SolicitudAumento::where('user_id', $user->id)->orderBy('id', 'DESC')->get();
-
+                $liquidaciones = Liquidacione::where('user_id', $user->id)->orderBy('fecha', 'DESC')->get();
+                
                 return view('users.show', compact('user', 'habilidades', 'titulos', 'certificaciones',
-                                                'proyectos', 'vacaciones', 'aumentos'));
+                                                'proyectos', 'vacaciones', 'aumentos', 'liquidaciones'));
             } else{
                 abort(403);
             }
@@ -358,7 +361,13 @@ class UserController extends Controller
     {
         $empresa = Configuracione::empresa();
         $contrato = Contrato::where('user_id', $user->id)->orderBy('id', 'desc')->first();
-        $pdf = PDF::loadView('users.certificado-antiguedad-pdf', ['user' => $user, 'empresa' => $empresa, 'contrato' => $contrato]);
+        $firma1 = User::find(35);
+        $firma1 = $firma1->info->firma;
+
+        $firma2 = User::find(36);
+        $firma2 = $firma2->info->firma;
+        
+        $pdf = PDF::loadView('users.certificado-antiguedad-pdf', ['user' => $user, 'empresa' => $empresa, 'contrato' => $contrato, 'firma1' => $firma1, 'firma2' => $firma2]);
         return $pdf->download('certificado_antiguedad_'.date('Y_m_d').'.pdf');
     }
 

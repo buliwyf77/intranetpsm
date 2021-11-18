@@ -14,10 +14,10 @@
           </tr>
           </thead>
           <tbody>
-              @foreach ($user->liquidaciones as $key => $liq)
+              @foreach ($liquidaciones as $key => $liq)
               <tr>
                   <td> {{$key+1}} </td>
-                  <td> {{$liq->fecha}}</td>
+                  <td> {{date('d-m-Y', strtotime($liq->fecha))}}</td>
                   <td> <a href="{{$liq->archivo}}" target="_blank" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Descargar Contrato"> <i data-feather="file-text"></i> </a> </td>
                   
                   <td>
