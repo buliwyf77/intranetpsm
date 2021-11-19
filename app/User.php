@@ -146,13 +146,11 @@ class User extends Authenticatable
             }
         }
 
-        //dd($birthdays);
-        
         $birthdays = collect($birthdays);
 
-        $birthdays->all();
-
-        return $birthdays->sortBy('birthday');
+        $b2 = $birthdays->sortBy('birthday');
+        
+        return $b2->values()->all();
 
     }
 
