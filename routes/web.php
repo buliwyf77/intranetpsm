@@ -179,3 +179,5 @@ Route::group(['middleware' => ['auth', 'check_active']], function(){
 
  //API
  Route::get('getCumpleMes/{mes}', 'UserController@getCumpleMes')->name('user.getCumpleMes');
+
+ Route::get('getListaCumpleMes/{mes}', 'UserController@getListaCumpleMes')->name('user.getListaCumpleMes');

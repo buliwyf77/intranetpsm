@@ -442,5 +442,10 @@ class UserController extends Controller
         return json_encode(User::cumpleMes($mes), true);
     }
 
+    public function getListaCumpleMes ($mes)
+    {
+        return json_encode(User::cumpleMesLista($mes), true);
+    }
+
 
 }

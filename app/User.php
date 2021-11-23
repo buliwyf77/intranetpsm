@@ -154,6 +154,22 @@ class User extends Authenticatable
 
     }
 
+
+    static function cumpleMesLista ($month)
+    {
+        $cumples = User::cumpleMes($month);
+
+        $lista = [];
+
+        foreach ($cumples as $key => $cumple) {
+            $lista[$key]['title'] = $cumple['name'];
+            $cumple = $cumple['birthday'] . '-' . date('Y');
+            $lista[$key]['birthday'] = date("Y-m-d", strtotime($cumple));
+        }
+
+        return $lista;
+    }
+
     // Metodo para verificar que el usuario tiene firma registrada antes de descargar documentos
     static function verificarFirma ($user_id)
     {
