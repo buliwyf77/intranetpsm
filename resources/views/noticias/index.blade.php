@@ -38,7 +38,7 @@
                         </div>
                     </div>
                 </td>
-                <td> {{ $noticia->user->name }} </td>
+                <td></td>
                 <td>
                     <div class="btn-group btn-group-sm btn-group-toggle float-right" role="group" aria-label="Acciones">
                         {{--<a href="{{route('solicitudes.show', $solicitude->id)}}" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ver Solicitude"> <i data-feather="eye"></i> </a>--}}
