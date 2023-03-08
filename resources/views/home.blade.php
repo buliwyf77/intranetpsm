@@ -163,7 +163,7 @@
   
         displayEventTime: false, // don't show the time column in list view
   
-        googleCalendarApiKey: 'AIzaSyANHZczT4nHHhNOLiXSBvF0ByE0dWBaAfA',
+        googleCalendarApiKey: 'AIzaSyDcnW6WejpTOCffshGDDb4neIrXVUA1EAE',
   
         // US Holidays
         //events: 'en.usa#holiday@group.v.calendar.google.com',
