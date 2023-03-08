@@ -39,8 +39,9 @@ class HomeController extends Controller
 
         $dailyIndicators  = $this->dailyIndicators();
 
-        $dailyClimate = $this->dailyClimate();
+        
 
+        $dailyClimate = $this->dailyClimate();
         return view('home', compact('noticias', 'dailyIndicators', 'dailyClimate'));
 
         //return redirect()->route('users.show', Auth::id());
