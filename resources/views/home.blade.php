@@ -236,7 +236,7 @@
             },
             cumpleMes: function () {
                 let vm = this;
-                axios.get('/api/getCumpleMes/' + this.month)
+                axios.get('/getCumpleMes/' + this.month)
                 .then(function (response) {
                     vm.birthdays = response.data;
                 })
