@@ -58,7 +58,7 @@ class ContratoController extends Controller
     {
         DB::beginTransaction();
         
-        $data = $request->all();          
+        $data = $request->all();
         
         $user = User::find($data['user_id']);
         

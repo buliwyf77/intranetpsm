@@ -162,6 +162,11 @@ Route::group(['middleware' => ['auth', 'check_active']], function(){
 
     Route::get('noticias/show', 'HomeController@showNoticias')->name('noticias.show');
 
+    //Documentos
+    Route::resource('documentos', 'DocumentosController')->except(['index', 'show'])->middleware('check_rol:master|administracion|gerencia');
+    Route::get('documentos', 'DocumentosController@index')->name('documentos.index');
+    Route::get('documentos/show/{id}', 'DocumentosController@show')->name('documentos.show');
+
 
     Route::resource('noticias', 'NoticiaController')->except('show')->middleware('check_rol:master|administracion');
 

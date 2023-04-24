@@ -175,6 +175,11 @@
                     </small>
                     @endif
                 </div>
+
+                <div class="mt-5"> <label>Usuario esta Vinculado ?</label>
+                <div class="mt-2"> <input name="activo" type="checkbox" class="input input--switch border" id="activo" value="{{$user->activo}}" {{ $user->activo === 1 ? 'checked' : ''}}> </div>
+            </div>
+
             </div>
             
         </div>

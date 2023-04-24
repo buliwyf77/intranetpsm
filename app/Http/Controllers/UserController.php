@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\User;
 use App\Usuario;
 use App\Role;
@@ -31,16 +32,16 @@ use App\Http\Requests\UserUpdate;
 
 use Carbon\Carbon;
 use Alert;
-use PDF;
 use DataTables;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade as PDF;
 use Image;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $users = User::all();             
+        $users = User::all();
         return view('users.index', compact('users'));
     }
 
@@ -51,7 +52,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $area = Area::orderBy('nombre', 'ASC')->pluck('nombre', 'id');     
+        $area = Area::orderBy('nombre', 'ASC')->pluck('nombre', 'id');
         return view('users.create', compact('area'));
     }
 
@@ -64,7 +65,7 @@ class UserController extends Controller
     public function store(UserStore $request)
     {
         DB::beginTransaction();
-        
+
         $data = $request->all();
 
         //dd($data);
@@ -78,9 +79,9 @@ class UserController extends Controller
             'area_id'   =>  $data['area_id'],
             'jefe_area' => isset($data['jefe_area']) ? true : false,
         ];
-        
+
         $imagen = 'https://intranet1.s3-sa-east-1.amazonaws.com/config/user.png';
-        
+
         if ($request->hasFile('imagen')) {
             //$img = Image::make($data['image'])->resize(300, 200);
             $imagen = Storage::disk('s3')->put('users-profiles', $data['imagen']);
@@ -89,35 +90,33 @@ class UserController extends Controller
 
         try {
 
-        $new_user = User::create($user);
+            $new_user = User::create($user);
 
-        $info = [
-            'fecha_nacimiento'  => $data['fecha_nacimiento'],
-            'fecha_ingreso'     => $data['fecha_ingreso'],
-            'nacionalidad'      => $data['nacionalidad'],
-            'doc_identidad'     => $data['doc_identidad'],
-            'num_doc'           => $data['num_doc'],
-            'direccion'         => $data['direccion'],
-            'telefono'          => $data['telefono'],
-            'imagen'            => $imagen,
-            'area_id'           => $data['area_id'],
-            'emergencia_nombre' => $data['emergencia_nombre'],
-            'emergencia_telefono' => $data['emergencia_telefono'],
-            'user_id'           => $new_user->id
-        ];
+            $info = [
+                'fecha_nacimiento'  => $data['fecha_nacimiento'],
+                'fecha_ingreso'     => $data['fecha_ingreso'],
+                'nacionalidad'      => $data['nacionalidad'],
+                'doc_identidad'     => $data['doc_identidad'],
+                'num_doc'           => $data['num_doc'],
+                'direccion'         => $data['direccion'],
+                'telefono'          => $data['telefono'],
+                'imagen'            => $imagen,
+                'area_id'           => $data['area_id'],
+                'emergencia_nombre' => $data['emergencia_nombre'],
+                'emergencia_telefono' => $data['emergencia_telefono'],
+                'user_id'           => $new_user->id
+            ];
 
-        if ($new_user) {
-            $new_info = Info::create($info);
-        }
-
-        //Registrar áreas si el usuario es jefe de área
-        if(isset($data['jefe_area'])){
-            foreach ($data['areas'] as $key => $area_id) {
-                JefeArea::register($new_user->id, $area_id);
+            if ($new_user) {
+                $new_info = Info::create($info);
             }
-        }
-           
-        
+
+            //Registrar áreas si el usuario es jefe de área
+            if (isset($data['jefe_area'])) {
+                foreach ($data['areas'] as $key => $area_id) {
+                    JefeArea::register($new_user->id, $area_id);
+                }
+            }
         } catch (\Exception $e) {
             DB::rollBack();
             alert()->error('Error', $e->getMessage())->showConfirmButton();
@@ -125,8 +124,8 @@ class UserController extends Controller
         }
 
         DB::commit();
-        
-        alert()->success('Registro Exitoso','El registro se ha procesado de manera exitosa')->showConfirmButton();
+
+        alert()->success('Registro Exitoso', 'El registro se ha procesado de manera exitosa')->showConfirmButton();
 
         //return redirect()->route('contratos.create', $new_user->id);
         return redirect()->route('users.show', $new_user->slug);
@@ -139,9 +138,9 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($slug)
-    {   
+    {
         $user = User::where('slug', $slug)->first();
-        
+
         if ($user != null) {
             $verifyAccess = User::getUserAuthorized($user->id);
 
@@ -154,16 +153,23 @@ class UserController extends Controller
                 $vacaciones = SolicitudVacacione::where('user_id', $user->id)->orderBy('id', 'DESC')->get();
                 $aumentos = SolicitudAumento::where('user_id', $user->id)->orderBy('id', 'DESC')->get();
                 $liquidaciones = Liquidacione::where('user_id', $user->id)->orderBy('fecha', 'DESC')->get();
-                
-                return view('users.show', compact('user', 'habilidades', 'titulos', 'certificaciones',
-                                                'proyectos', 'vacaciones', 'aumentos', 'liquidaciones'));
-            } else{
+
+                return view('users.show', compact(
+                    'user',
+                    'habilidades',
+                    'titulos',
+                    'certificaciones',
+                    'proyectos',
+                    'vacaciones',
+                    'aumentos',
+                    'liquidaciones'
+                ));
+            } else {
                 abort(403);
             }
-        } else{
+        } else {
             abort(404);
         }
-        
     }
 
     /**
@@ -180,8 +186,8 @@ class UserController extends Controller
 
         if ($verifyAccess) {
             $area = Area::orderBy('nombre', 'ASC')->pluck('nombre', 'id');
-            return view('users.edit', compact('user', 'area')); 
-        }else{
+            return view('users.edit', compact('user', 'area'));
+        } else {
             abort(403);
         }
     }
@@ -203,23 +209,31 @@ class UserController extends Controller
 
             $data = $request->all();
 
+
+
             $info = Info::where('user_id', $user->id)->first();
-        
+
             DB::beginTransaction();
-            
+
             try {
 
                 if (isset($data['password'])) {
                     $data['password'] = bcrypt($data['password']);
-                }else{
+                } else {
                     $data['password'] = $user->password;
                 }
-                
+
+                if (isset($data['activo'])) {
+                    $data['activo'] = 1;
+                } else {
+                    $data['activo'] = 0;
+                }
+
                 $user->fill($data);
                 $user->save();
 
                 $imagen = $info->imagen;
-                if(isset($data['imagen']) && ($data['imagen'] != null)) {                
+                if (isset($data['imagen']) && ($data['imagen'] != null)) {
                     Storage::disk('s3')->delete('users-profiles/' . $user->image);
                     //&& Image::make($data)->resize(300, 200);                 
                     $imagen = Storage::disk('s3')->put('users-profiles', $data['imagen']);
@@ -238,12 +252,11 @@ class UserController extends Controller
                     'area_id'           => $data['area_id'],
                     'emergencia_nombre' => $data['emergencia_nombre'],
                     'emergencia_telefono' => $data['emergencia_telefono'],
-                ]; 
+                ];
 
                 $info = Info::where('user_id', $user->id)->first();
 
                 $info->update($infoUpdate);
-                
             } catch (\Exception $e) {
                 DB::rollBack();
                 alert()->error('Error', $e->getMessage());
@@ -252,14 +265,12 @@ class UserController extends Controller
 
             DB::commit();
 
-            alert()->success('Registro Exitoso','El registro se ha procesado de manera exitosa')->showConfirmButton();
-            
-            return redirect()->route('users.show', $user->slug);
+            alert()->success('Registro Exitoso', 'El registro se ha procesado de manera exitosa')->showConfirmButton();
 
-        }else{
+            return redirect()->route('users.show', $user->slug);
+        } else {
 
             abort(403);
-
         }
 
         /*if(Auth::User()->role_id == 1){
@@ -278,15 +289,15 @@ class UserController extends Controller
 
     public function delete($id)
     {
-       $user = User::find($id);
-       $user->delete();
+        $user = User::find($id);
+        $user->delete();
         return back()->with('notification', 'El usuario se ha dado de baja correctamente');
     }
 
     public function destroy(User $user)
     {
         try {
-       
+
             $user->delete();
         } catch (\Exception $user) {
             alert()->error('Error', $user->getMessage())->showCloseButton()->showConfirmButton();
@@ -297,67 +308,67 @@ class UserController extends Controller
 
 
     //Eliminar registro en tabla join habilidad_user
-    public function deleteHabilidad ($user_id, $habilidad_id)
+    public function deleteHabilidad($user_id, $habilidad_id)
     {
         $user = User::find($user_id);
         $user->habilidades()->detach($habilidad_id);
-        alert()->success('Registro Exitoso','El registro se ha procesado de manera exitosa');
+        alert()->success('Registro Exitoso', 'El registro se ha procesado de manera exitosa');
         return redirect()->route('users.show', $user->slug);
     }
 
     //Agregar registro en tabla join habilidad_user
-    public function storeHabilidad (Request $request)
+    public function storeHabilidad(Request $request)
     {
         $data = $request->all();
         $user = User::find($data['user_id']);
         $user->habilidades()->attach($data['habilidade_id']);
-        alert()->success('Registro Exitoso','El registro se ha procesado de manera exitosa');
+        alert()->success('Registro Exitoso', 'El registro se ha procesado de manera exitosa');
         return redirect()->route('users.show', $user->slug);
     }
 
 
     //Eliminar registro en tabla join titulo_user
-    public function deleteTitulo ($user_id, $titulo_id)
+    public function deleteTitulo($user_id, $titulo_id)
     {
         $user = User::find($user_id);
         $user->titulos()->detach($titulo_id);
-        alert()->success('Registro Exitoso','El registro se ha procesado de manera exitosa');
+        alert()->success('Registro Exitoso', 'El registro se ha procesado de manera exitosa');
         return redirect()->route('users.show', $user->slug);
     }
 
     //Agregar registro en tabla join titulo_user
-    public function storeTitulo (Request $request)
+    public function storeTitulo(Request $request)
     {
         $data = $request->all();
         $user = User::find($data['user_id']);
         $user->titulos()->attach($data['titulo_id']);
-        alert()->success('Registro Exitoso','El registro se ha procesado de manera exitosa');
+        alert()->success('Registro Exitoso', 'El registro se ha procesado de manera exitosa');
         return redirect()->route('users.show', $user->slug);
     }
 
 
     //Eliminar registro en tabla join certificacion_user
-    public function deleteCertificacion ($user_id, $certificacion_id)
+    public function deleteCertificacion($user_id, $certificacion_id)
     {
         $user = User::find($user_id);
         $user->certificaciones()->detach($certificacion_id);
-        alert()->success('Registro Exitoso','El registro se ha procesado de manera exitosa');
+        alert()->success('Registro Exitoso', 'El registro se ha procesado de manera exitosa');
         return redirect()->route('users.show', $user->slug);
     }
 
     //Agregar registro en tabla join certificacion_user
-    public function storeCertificacion (Request $request)
+    public function storeCertificacion(Request $request)
     {
         $data = $request->all();
         $user = User::find($data['user_id']);
         $user->certificaciones()->attach($data['certificacione_id']);
-        alert()->success('Registro Exitoso','El registro se ha procesado de manera exitosa');
+        alert()->success('Registro Exitoso', 'El registro se ha procesado de manera exitosa');
         return redirect()->route('users.show', $user->slug);
     }
 
 
     //Descargar PDF de certificado de antiguedad
-    public function pdfCertificadoAntiguedad (User $user)
+    public function pdfCertificadoAntiguedad(User $user)
     {
         $empresa = Configuracione::empresa();
         $contrato = Contrato::where('user_id', $user->id)->orderBy('id', 'desc')->first();
@@ -366,72 +377,78 @@ class UserController extends Controller
 
         $firma2 = User::find(36);
         $firma2 = $firma2->info->firma;
-        
+
         $pdf = PDF::loadView('users.certificado-antiguedad-pdf', ['user' => $user, 'empresa' => $empresa, 'contrato' => $contrato, 'firma1' => $firma1, 'firma2' => $firma2]);
-        return $pdf->download('certificado_antiguedad_'.date('Y_m_d').'.pdf');
+        return $pdf->download('certificado_antiguedad_' . date('Y_m_d') . '.pdf');
     }
 
     //Ditectorio de Trabajadores
-    public function directorio(){
-        $users = User::orderBy('name', 'ASC')->get();
+    public function directorio()
+    {
+
+        if (Auth::user()->role_id == 1 || Auth::user()->role_id == 4) {
+            $users = User::orderBy('name', 'ASC')->get();
+        } else {
+            $users = User::where('area_id', auth()->user()->area_id)->orderBy('name', 'ASC')->get();
+        }
+
+
         return view('users.directorio', compact('users'));
     }
 
     //Formulario para Crear Firma de Usuario
-    public function crearFirma ($slug) 
+    public function crearFirma($slug)
     {
         $user = User::where('slug', $slug)->first();
         $user_id = $user->id;
-        
+
         $verifyAccess = User::getUserAuthorized($user->id);
 
         if ($verifyAccess) {
             return view('users.crear_firma', compact('user_id'));
-        }else{
+        } else {
             abort(403);
         }
-
     }
 
     //Metodo para Guardar la Firma del USuario
-    public function guardarFirma (Request $request)
+    public function guardarFirma(Request $request)
     {
 
         $img = $request->get('firma');
         $img = str_replace('data:image/png;base64,', '', $img);
         $img = str_replace(' ', '+', $img);
-        
+
         $data = base64_decode($img);
-        $imageName = Str::random(20).'.'.'png';
-        $imagen = Storage::disk('s3')->put('users-firmas/'.$imageName, $data);
-        $firma = 'https://intranet1.s3-sa-east-1.amazonaws.com/users-firmas/'.$imageName;
+        $imageName = Str::random(20) . '.' . 'png';
+        $imagen = Storage::disk('s3')->put('users-firmas/' . $imageName, $data);
+        $firma = 'https://intranet1.s3-sa-east-1.amazonaws.com/users-firmas/' . $imageName;
 
         $user_id = $request->get('user_id');
         $user = User::find($user_id);
         $info = Info::where('user_id', $user_id)->first();
         $info->update(['firma' => $firma]);
-        
-        alert()->success('Registro Exitoso','El registro se ha procesado de manera exitosa');
-        return redirect()->route('users.show', $user->slug);
 
+        alert()->success('Registro Exitoso', 'El registro se ha procesado de manera exitosa');
+        return redirect()->route('users.show', $user->slug);
     }
 
     //Método para crear una index con los jefes de áreas
-    public function jefesAreas ()
+    public function jefesAreas()
     {
         $jefes_areas = JefeArea::all();
         return view('users.jefes_areas', compact('jefes_areas'));
     }
 
     //Método para eliminar a los registros de jefes de áreas - áreas
-    public function deleteJefesAreas ($id)
+    public function deleteJefesAreas($id)
     {
         $jefe_area = JefeArea::find($id);
 
         $jefe_area->delete();
 
         alert()->success('Registro Eliminado', 'El registro se ha borrado correctamente')->showCloseButton()->showConfirmButton();
-        
+
         return redirect()->back();
     }
 
@@ -442,10 +459,8 @@ class UserController extends Controller
         return json_encode(User::cumpleMes($mes), true);
     }
 
-    public function getListaCumpleMes ($mes)
+    public function getListaCumpleMes($mes)
     {
         return json_encode(User::cumpleMesLista($mes), true);
     }
-
-
 }

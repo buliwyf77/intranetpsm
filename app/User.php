@@ -7,9 +7,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
-use App\User;
 use App\Info;
-
+use App\Area;
 
 
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +28,10 @@ class User extends Authenticatable
     protected $dates = ['deleted_at'];
     protected $fillable = [
         'name', 'email', 'password', 'role_id', 'slug', 'area_id', 'activo', 'jefe_area'
+    ];
+
+    protected $visible = [
+        'name', 'email', 'password', 'role_id', 'slug', 'area_id', 'activo', 'jefe_area', 'id', 'activo'
     ];
 
     /**
@@ -68,7 +71,10 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\ExperienciaLaborale');
     }
+    public function area() {
 
+        return $this->hasOne('App\Area');   
+    }
     public function info ()
     {
         return $this->hasOne('App\Info');
