@@ -34,7 +34,7 @@
                     <td> {{ $documento->user->name}}</td>
                     <td>
                         <div class="btn-group btn-group-sm btn-group-toggle float-right" role="group" aria-label="Acciones">
-                            <a href="{{route('documentos.show', $documento->id)}}" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ver Documento"> <i data-feather="eye"></i> </a>
+                            <a href="{{route('documentos.show', $documento->id)}}" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Ver Documento"> <i data-feather="download"></i> </a>
                             @if($documento->user_id == Auth::user()->id)
                             {!! Form::model($documento, ['method' => 'delete', 'route' => ['documentos.destroy', $documento->id], 'class' =>'form-inline form-delete']) !!}
                             {!! Form::hidden('id', $documento->id) !!}
